@@ -1,13 +1,16 @@
 /* Includes ------------------------------------------------------------------*/
+#include <stdlib.h>
 #include "DEV_Config.h"
 #include "EPD.h"
 #include "GUI_Paint.h"
 #include "imagedata.h"
 #include "imagepainter.h"
-#include <stdlib.h>
+#include "wifihelper.h"
+#include "datetimehelper.h"
+
+DateTimeDay datetimedayinfo;
 
 void setup() {
-  printf("EPD_4IN2_V2_test Demo\r\n");
   DEV_Module_Init();
 
   printf("e-Paper Init and Clear...\r\n");
@@ -23,13 +26,14 @@ void setup() {
       printf("Failed to apply for black memory...\r\n");
       while (1);
   }
-  printf("Paint_NewImage\r\n");
   Paint_NewImage(BlackImage, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT, 0, WHITE);
-  paint_inspace(BlackImage);
-  delay(2000);
-  paint_nasa(BlackImage);
+
+  // paint_nasa(BlackImage);
+  // wifi_connect();
+  // time_init();
+  // wifi_disconnect();
 }
 
 void loop() {
-
+  get_local_date_time(&datetimedayinfo);
 }

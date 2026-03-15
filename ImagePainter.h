@@ -1,4 +1,3 @@
-
 #ifndef _imagepainter_h_
 #define _imagepainter_h_
 

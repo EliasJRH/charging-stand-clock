@@ -1,3 +1,5 @@
+// Helper functions for painting images
+
 #include "DEV_Config.h"
 #include "EPD.h"
 #include "GUI_Paint.h"

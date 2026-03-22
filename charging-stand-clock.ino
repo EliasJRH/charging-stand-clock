@@ -26,11 +26,12 @@ void setup() {
       printf("Failed to apply for black memory...\r\n");
       while (1);
   }
-  Paint_NewImage(BlackImage, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT, 0, WHITE);
+  Paint_NewImage(Canvas, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT, 0, WHITE);
+  Paint_SelectImage(Canvas);
 
-  // paint_nasa(BlackImage);
-  // wifi_connect();
-  // time_init();
+  Paint_Clear(WHITE);
+  wifi_connect();
+  time_init();
   // wifi_disconnect();
 }
 

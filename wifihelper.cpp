@@ -12,7 +12,6 @@ void wifi_connect() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-  printf("Connected to %s\n", ssid);
 }
 
 void wifi_disconnect () {

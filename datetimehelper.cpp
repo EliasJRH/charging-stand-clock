@@ -18,6 +18,7 @@ void get_local_date_time(DateTimeDay* datetimeinfo) {
     printf("Failed to obtain time\n");
     return;
   }
-  datetimeinfo->datetime.Year = timeinfo.tm_year;
+  datetimeinfo->datetime.Year = timeinfo.tm_year + 1900;
+  datetimeinfo->datetime.Day = timeinfo.tm_mday;
   datetimeinfo->datetime.Month = timeinfo.tm_mon;
 }

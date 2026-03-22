@@ -8,7 +8,7 @@
 WiFiClient client;
 HTTPClient https;
 String weather_response;
-const char* curr_weather_api = "https://api.openweathermap.org/data/2.5/weather?lat=45.41117&lon=-75.69812&appid=61428bdd12c68e07a373134164b7de36&units=metric";
+const char* curr_weather_api = "https://api.openweathermap.org/data/2.5/weather?lat=45.41117&lon=-75.69812&appid=&units=metric";
 const char* weather_api_cert = \
   "-----BEGIN CERTIFICATE-----\n" \
   "MIIG5jCCBc6gAwIBAgIQT0UaOwW0bnvATrvIc88vkDANBgkqhkiG9w0BAQsFADCB\n" \

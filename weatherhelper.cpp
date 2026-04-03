@@ -7,8 +7,8 @@
 
 WiFiClientSecure client;
 String weather_response;
-const char* weather_host = "api.openweathermap.org";
-const char* curr_weather_path = "/data/2.5/weather?lat=45.41117&lon=-75.69812&appid=<key>0&units=metric";
+const char* weather_host = "api.open-meteo.com";
+const char* curr_weather_path = "/v1/forecast?latitude=lat&longitude=-lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
 String httpGETRequest(const char* endpoint) {
   // attempt to connect to Wifi network:
@@ -24,11 +24,12 @@ String httpGETRequest(const char* endpoint) {
   } else {
     Serial.println("Connected to server, sending request");
    
-    // Make request to endpoint:
-    client.print(String("GET ") + endpoint + " HTTP/1.1\r\n" +
+    // Print raw request string to client
+    client.print(String("GET ") + endpoint + " HTTP/1.0\r\n" +
                "Host: " + weather_host + "\r\n" +
                "Connection: close\r\n\r\n");
 
+    // Ignore headers
     while (client.connected()) {
       String line = client.readStringUntil('\n');
       if (line == "\r") {
@@ -36,18 +37,16 @@ String httpGETRequest(const char* endpoint) {
         break;
       }
     }
-    // if there are incoming bytes available
-    // from the server, read them and print them:
-    Serial.println("Output:");
+
+    // Save output to payload
     String payload = "";
     while (client.available()) {
       char c = client.read();
       payload += c;
-      Serial.write(c);
     }
 
     client.stop();
-    return "";
+    return payload;
   }
 }
 

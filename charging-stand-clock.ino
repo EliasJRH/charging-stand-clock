@@ -10,7 +10,7 @@
 
 DateTimeDay datetimedayinfo;
 Weather weather;
-uint8_t last_hour = 0;
+uint8_t last_hour = 25;
 //Create a new image cache
 UBYTE *Canvas;
 char date_buf[30];

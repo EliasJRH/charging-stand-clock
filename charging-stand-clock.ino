@@ -46,7 +46,9 @@ void loop() {
   sprintf(date_buf, "%s %s %u %u", day_names[datetimedayinfo.weekday], month_names[datetimedayinfo.datetime.Month], datetimedayinfo.datetime.Day + 1, datetimedayinfo.datetime.Year);
   Paint_DrawTime(25, 20, &(datetimedayinfo.datetime), &FontCascadia3, WHITE, BLACK);
   Paint_DrawString_EN(255, 50, datetimedayinfo.amorpm, &Font20, WHITE, BLACK);
-  Paint_DrawString_EN(45, 80, date_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(52, 80, date_buf, &Font20, WHITE, BLACK);
+  
+  // Weather 
   if (last_hour != datetimedayinfo.datetime.Hour) {
     Serial.println("UPDATING WEATHER");
     last_hour = datetimedayinfo.datetime.Hour;

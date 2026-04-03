@@ -11,7 +11,6 @@ const char* weather_host = "api.open-meteo.com";
 const char* curr_weather_path = "/v1/forecast?latitude=lat&longitude=-lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
 String httpGETRequest(const char* endpoint) {
-  // attempt to connect to Wifi network:
   Serial.println("Connecting to network...");
   wifi_connect();
   Serial.println("Connected.");

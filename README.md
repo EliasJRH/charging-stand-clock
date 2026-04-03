@@ -7,3 +7,5 @@ If you're like me and don't want to compile using the Arduino IDE, here's the co
 Compile with: `arduino-cli compile -b esp32:esp32:esp32`
 
 Upload with: `arduino-cli upload -p COM3 -b esp32:esp32:esp32`
+
+Monitor serial output with: `arduino-cli monitor -p COM3`

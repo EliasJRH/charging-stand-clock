@@ -9,6 +9,6 @@ typedef struct {
   char* desc;
 } Weather;
 
-void update_weather(Weather* weather);
+bool update_weather(Weather* weather);
 
 #endif

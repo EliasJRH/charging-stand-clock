@@ -8,7 +8,7 @@
 WiFiClientSecure client;
 String weather_response;
 const char* weather_host = "api.open-meteo.com";
-const char* curr_weather_path = "/v1/forecast?latitude=lat&longitude=-lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
+const char* curr_weather_path = "/v1/forecast?latitude=45.41117&longitude=-75.69812&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
 String httpGETRequest(const char* endpoint) {
   Serial.println("Connecting to network...");
@@ -49,13 +49,14 @@ String httpGETRequest(const char* endpoint) {
   }
 }
 
-void update_weather(Weather* weather){
+bool update_weather(Weather* weather){
   String payload = httpGETRequest(curr_weather_path);
-  if (payload.length() == 0) return;
+  if (payload.length() == 0) return false;
 
   JSONVar payload_json = JSON.parse(payload);
   weather->temp = int(round(double(payload_json["current"]["temperature_2m"])));
   weather->feels_like = int(round(double(payload_json["current"]["apparent_temperature"])));
   weather->min = int(round(double(payload_json["daily"]["temperature_2m_min"][0])));
   weather->max = int(round(double(payload_json["daily"]["temperature_2m_max"][0])));
+  return true;
 }

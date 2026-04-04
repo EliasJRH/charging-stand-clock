@@ -55,13 +55,15 @@ void loop() {
   
   // Weather 
   if (last_hour != datetimedayinfo.datetime.Hour) {
-    Serial.println("UPDATING WEATHER");
     last_hour = datetimedayinfo.datetime.Hour;
-    update_weather(&weather);
+    while(!update_weather(&weather)){
+      delay(500);
+    };
   }
-  Paint_DrawNum(90, 120, weather.temp, &FontCascadia3, BLACK, WHITE);
-  Paint_DrawCircle(170, 135, 4, BLACK, DOT_PIXEL_2X2, DRAW_FILL_EMPTY);
-  Paint_DrawChar(180, 120, 'C', &FontCascadia3, BLACK, WHITE);
+  int offset = weather.temp < 10 ? floor(FontCascadia3.Width/2) : 0;
+  Paint_DrawNum(90 + offset, 120, weather.temp, &FontCascadia3, BLACK, WHITE);
+  Paint_DrawCircle(170 - offset, 135, 4, BLACK, DOT_PIXEL_2X2, DRAW_FILL_EMPTY);
+  Paint_DrawChar(180 - offset, 120, 'C', &FontCascadia3, BLACK, WHITE);
 
   memset(feels_like_buf, 0, sizeof feels_like_buf);
   sprintf(feels_like_buf, "Feels like: %u", weather.feels_like);

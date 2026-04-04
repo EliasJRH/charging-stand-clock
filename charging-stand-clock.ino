@@ -71,7 +71,7 @@ void loop() {
 
   memset(min_max_buf, 0, sizeof min_max_buf);
   sprintf(min_max_buf, "High: %u | Low: %u", weather.max, weather.min);
-  Paint_DrawString_EN(30, 200, min_max_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(25, 200, min_max_buf, &Font20, WHITE, BLACK);
 
   EPD_4IN2_V2_PartialDisplay(Canvas, 0, 0, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT);
   DEV_Delay_ms(250);

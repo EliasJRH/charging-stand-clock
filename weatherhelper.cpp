@@ -8,7 +8,7 @@
 WiFiClientSecure client;
 String weather_response;
 const char* weather_host = "api.open-meteo.com";
-const char* curr_weather_path = "/v1/forecast?latitude=45.41117&longitude=-75.69812&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
+const char* curr_weather_path = "/v1/forecast?latitude=lat&longitude=lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
 String httpGETRequest(const char* endpoint) {
   Serial.println("Connecting to network...");

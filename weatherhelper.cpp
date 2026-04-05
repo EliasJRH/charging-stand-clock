@@ -54,6 +54,16 @@ bool update_weather(Weather* weather){
   if (payload.length() == 0) return false;
 
   JSONVar payload_json = JSON.parse(payload);
+
+  if (payload_json.length() == 0) return false;
+  if (!payload_json.hasOwnProperty("current")) return false;
+  if (!payload_json.hasOwnProperty("daily")) return false;
+  
+  JSONVar temp = payload_json["current"];
+  if (!temp.hasOwnProperty("temperature_2m") || !temp.hasOwnProperty("apparent_temperature")) return false;
+  JSONVar temp = payload_json["daily"];
+  if (!temp.hasOwnProperty("temperature_2m_min") || !temp.hasOwnProperty("temperature_2m_max")) return false;
+
   weather->temp = int(round(double(payload_json["current"]["temperature_2m"])));
   weather->feels_like = int(round(double(payload_json["current"]["apparent_temperature"])));
   weather->min = int(round(double(payload_json["daily"]["temperature_2m_min"][0])));

@@ -57,7 +57,7 @@ void loop() {
   if (last_hour != datetimedayinfo.datetime.Hour) {
     last_hour = datetimedayinfo.datetime.Hour;
     while(!update_weather(&weather)){
-      delay(500);
+      delay(2000);
     };
   }
   int offset = abs(weather.temp) < 10 ? floor(FontCascadia3.Width/2) : 0;

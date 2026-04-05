@@ -66,11 +66,11 @@ void loop() {
   Paint_DrawChar(180 - offset, 120, 'C', &FontCascadia3, BLACK, WHITE);
 
   memset(feels_like_buf, 0, sizeof feels_like_buf);
-  sprintf(feels_like_buf, "Feels like: %u", weather.feels_like);
+  sprintf(feels_like_buf, "Feels like: %d", weather.feels_like);
   Paint_DrawString_EN(55, 180, feels_like_buf, &Font20, WHITE, BLACK);
 
   memset(min_max_buf, 0, sizeof min_max_buf);
-  sprintf(min_max_buf, "High: %u | Low: %u", weather.max, weather.min);
+  sprintf(min_max_buf, "High: %d | Low: %d", weather.max, weather.min);
   Paint_DrawString_EN(25, 200, min_max_buf, &Font20, WHITE, BLACK);
 
   EPD_4IN2_V2_PartialDisplay(Canvas, 0, 0, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT);

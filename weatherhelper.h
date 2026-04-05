@@ -2,10 +2,10 @@
 #define _WEATHERHELPER_H_
 
 typedef struct {
-  uint8_t temp;
-  uint8_t feels_like;
-  uint8_t min;
-  uint8_t max;
+  int16_t temp;
+  int16_t feels_like;
+  int16_t min;
+  int16_t max;
   char* desc;
 } Weather;
 

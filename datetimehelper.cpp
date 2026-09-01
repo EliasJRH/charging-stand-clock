@@ -40,7 +40,3 @@ void get_local_date_time(DateTimeDay* datetimeinfo) {
     }
   }
 }
-
-void convert_to_12hr(PAINT_TIME* time) {
-
-}

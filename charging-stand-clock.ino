@@ -61,6 +61,7 @@ void loop() {
     };
   }
   int offset = abs(weather.temp) < 10 ? floor(FontCascadia3.Width/2) : 0;
+  offset -= weather.temp < 0 ? floor(FontCascadia3.Width/2) : 0;
   Paint_DrawNum(90 + offset, 120, weather.temp, &FontCascadia3, BLACK, WHITE);
   Paint_DrawCircle(170 - offset, 135, 4, BLACK, DOT_PIXEL_2X2, DRAW_FILL_EMPTY);
   Paint_DrawChar(180 - offset, 120, 'C', &FontCascadia3, BLACK, WHITE);

@@ -1,56 +1,15 @@
 #include <stdio.h>
 #include <WiFi.h>
-#include <WiFiClientSecure.h>
 #include <Arduino_JSON.h>
 #include "weatherhelper.h"
 #include "wifihelper.h"
 
-WiFiClientSecure client;
 String weather_response;
 const char* weather_host = "api.open-meteo.com";
 const char* curr_weather_path = "/v1/forecast?latitude=lat&longitude=lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
-String httpGETRequest(const char* endpoint) {
-  Serial.println("Connecting to network...");
-  wifi_connect();
-  Serial.println("Connected.");
-  
-  Serial.println("Sending request");
-  client.setInsecure();
-  if (!client.connect(weather_host, 443)){
-    Serial.println("Connection failed!");
-    return "";
-  } else {
-    Serial.println("Connected to server, sending request");
-   
-    // Print raw request string to client
-    client.print(String("GET ") + endpoint + " HTTP/1.0\r\n" +
-               "Host: " + weather_host + "\r\n" +
-               "Connection: close\r\n\r\n");
-
-    // Ignore headers
-    while (client.connected()) {
-      String line = client.readStringUntil('\n');
-      if (line == "\r") {
-        Serial.println("headers received");
-        break;
-      }
-    }
-
-    // Save output to payload
-    String payload = "";
-    while (client.available()) {
-      char c = client.read();
-      payload += c;
-    }
-
-    client.stop();
-    return payload;
-  }
-}
-
 bool update_weather(Weather* weather){
-  String payload = httpGETRequest(curr_weather_path);
+  String payload = httpGETRequest(weather_host, local_weather_endpoint, {});
   if (payload.length() == 0) return false;
 
   JSONVar payload_json = JSON.parse(payload);
@@ -58,10 +17,10 @@ bool update_weather(Weather* weather){
   if (payload_json.length() == 0) return false;
   if (!payload_json.hasOwnProperty("current")) return false;
   if (!payload_json.hasOwnProperty("daily")) return false;
-  
+
   JSONVar temp = payload_json["current"];
   if (!temp.hasOwnProperty("temperature_2m") || !temp.hasOwnProperty("apparent_temperature")) return false;
-  JSONVar temp = payload_json["daily"];
+  temp = payload_json["daily"];
   if (!temp.hasOwnProperty("temperature_2m_min") || !temp.hasOwnProperty("temperature_2m_max")) return false;
 
   weather->temp = int(round(double(payload_json["current"]["temperature_2m"])));

@@ -4,9 +4,10 @@
 #include <WiFi.h>
 #include <WiFiClientSecure.h>
 #include "wifihelper.h"
+#include "consts.h"
 
-const char* ssid     = "BBFMRog";
-const char* password = "LaloosHawa";
+const char* ssid     = SSID;
+const char* password = PASSWORD;
 
 WiFiClientSecure client;
 

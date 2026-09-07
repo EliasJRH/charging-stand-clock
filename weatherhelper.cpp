@@ -3,9 +3,10 @@
 #include <Arduino_JSON.h>
 #include "weatherhelper.h"
 #include "wifihelper.h"
+#include "consts.h"
 
 const char* weather_host = "api.open-meteo.com";
-const char* local_weather_endpoint = "/v1/forecast?latitude=lat&longitude=lon&daily=temperature_2m_max,temperature_2m_min&models=gem_seamless&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
+const char* local_weather_endpoint = "/v1/forecast?latitude=" LAT "&longitude=" LONG "&daily=temperature_2m_max,temperature_2m_min&current=temperature_2m,apparent_temperature&timezone=auto&forecast_days=1";
 
 bool update_weather(Weather* weather){
   String payload = httpGETRequest(weather_host, local_weather_endpoint, "");

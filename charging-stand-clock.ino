@@ -7,17 +7,24 @@
 #include "wifihelper.h"
 #include "datetimehelper.h"
 #include "weatherhelper.h"
+#include "bibleversehelper.h"
 
 DateTimeDay datetimedayinfo;
 Weather weather;
+PassageInfo passageinfo;
 uint8_t last_hour = 25;
+uint16_t cur_day_num = 400;
 //Create a new image cache
 UBYTE *Canvas;
 char date_buf[30];
 char temp_buf[5];
 char feels_like_buf[20];
 char min_max_buf[20];
-
+char full_passage_buf[500];
+char passage_buf[35];
+char passage_ref_buf[25];
+uint8_t days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+uint16_t days = 0;
 
 void setup() {
   DEV_Module_Init();
@@ -31,15 +38,13 @@ void setup() {
       printf("Failed to allocate memory...\r\n");
       while (1);
   }
-  Paint_NewImage(Canvas, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT, 0, WHITE);
+  Paint_NewImage(Canvas, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT, ROTATE_270, WHITE);
   Paint_SelectImage(Canvas);
 
   Paint_Clear(WHITE);
   wifi_connect();
   time_init();
-  // wifi_disconnect();
   EPD_4IN2_V2_Display(Canvas);
-  Paint_SetRotate(ROTATE_270);
 }
 
 void loop() {
@@ -60,6 +65,18 @@ void loop() {
       delay(2000);
     };
   }
+
+  // Get day no. for bible verse
+  days = 0;
+  for(uint8_t i = 0; i < datetimedayinfo.datetime.Month; ++i){
+    days += days_in_month[i];
+  }
+  days += datetimedayinfo.datetime.Day;
+  if (cur_day_num != days){
+    cur_day_num = days;
+    get_bible_verse(cur_day_num, &passageinfo);
+  }
+
   int offset = abs(weather.temp) < 10 ? floor(FontCascadia3.Width/2) : 0;
   offset -= weather.temp < 0 ? floor(FontCascadia3.Width/2) : 0;
   Paint_DrawNum(90 + offset, 120, weather.temp, &FontCascadia3, BLACK, WHITE);
@@ -73,6 +90,32 @@ void loop() {
   memset(min_max_buf, 0, sizeof min_max_buf);
   sprintf(min_max_buf, "High: %d | Low: %d", weather.max, weather.min);
   Paint_DrawString_EN(25, 200, min_max_buf, &Font20, WHITE, BLACK);
+
+  int passage_line = 0;
+  memset(full_passage_buf, 0, sizeof(full_passage_buf));
+  memcpy(full_passage_buf, passageinfo.content, strlen(passageinfo.content));
+  memset(passage_buf, 0, sizeof(passage_buf));
+
+  int passage_lines = lines_in_verse(full_passage_buf);
+  int passage_y_offset = passage_lines >= 7 ? 0 : 7 - passage_lines;
+  char *next_word = strtok(full_passage_buf, " ");
+  while(next_word != NULL){
+    if (passage_line == 7) break;
+
+    if (strlen(passage_buf) + strlen(next_word) + 1 <= 26){
+      strcat(passage_buf, next_word);
+      if (strlen(passage_buf) != 26) strcat(passage_buf, " ");
+      next_word = strtok(NULL, " ");
+    } else {
+      if (passage_line == 6 && strlen(passage_buf) + 4 < 26) strcat(passage_buf, "...");
+      Paint_DrawString_EN(15, 270 + (Font16.Height * (passage_y_offset + passage_line++)), passage_buf, &Font16, WHITE, BLACK);
+      memset(passage_buf, 0, sizeof(passage_buf));
+    }
+  }
+
+  if (passage_line != 7) Paint_DrawString_EN(15, 270 + (Font16.Height * (passage_y_offset + passage_line++)), passage_buf, &Font16, WHITE, BLACK);
+  sprintf(passage_ref_buf, "- %s", passageinfo.passage);
+  Paint_DrawString_EN(285 - (Font16.Width * strlen(passage_ref_buf)), 270 + (Font16.Height * (passage_y_offset + passage_line)), passage_ref_buf, &Font16, WHITE, BLACK);
 
   EPD_4IN2_V2_PartialDisplay(Canvas, 0, 0, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT);
   DEV_Delay_ms(250);

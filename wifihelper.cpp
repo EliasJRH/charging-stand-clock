@@ -22,22 +22,25 @@ void wifi_disconnect () {
   WiFi.mode(WIFI_OFF);
 }
 
-String httpGETRequest(const char* host, const char* endpoint, const char** headers) {
-  Serial.println("Connecting to network...");
+String httpGETRequest(const char* host, const char* endpoint, const char* headers) {
   wifi_connect();
-  Serial.println("Connected.");
   
-  Serial.println("Sending request");
+  Serial.print("Sending request to ");
+  Serial.print(host);
+  Serial.println(endpoint);
   client.setInsecure();
   if (!client.connect(host, 443)){
     Serial.println("Connection failed!");
     return "";
   } else {
     Serial.println("Connected to server, sending request");
+
+    Serial.print("Header sent: ");
+    Serial.println(headers);
    
     // Print raw request string to client
     client.print(String("GET ") + endpoint + " HTTP/1.0\r\n" +
-               "Host: " + host + "\r\n" +
+               "Host: " + host + "\r\n" + headers +
                "Connection: close\r\n\r\n");
 
     // Ignore headers

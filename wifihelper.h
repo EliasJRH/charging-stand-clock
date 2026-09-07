@@ -4,6 +4,6 @@
 void wifi_connect();
 void wifi_disconnect();
 
-String httpGETRequest(const char* host, const char* endpoint, const char* headers[]);
+String httpGETRequest(const char* host, const char* endpoint, const char* headers);
 
 #endif

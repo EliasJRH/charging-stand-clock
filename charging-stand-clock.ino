@@ -21,7 +21,7 @@ char temp_buf[5];
 char feels_like_buf[20];
 char min_max_buf[20];
 char full_passage_buf[500];
-char passage_buf[35];
+char passage_line_buf[35];
 char passage_ref_buf[25];
 uint8_t days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 uint16_t days = 0;
@@ -94,28 +94,28 @@ void loop() {
   int passage_line = 0;
   memset(full_passage_buf, 0, sizeof(full_passage_buf));
   memcpy(full_passage_buf, passageinfo.content, strlen(passageinfo.content));
-  memset(passage_buf, 0, sizeof(passage_buf));
+  memset(passage_line_buf, 0, sizeof(passage_line_buf));
 
   int passage_lines = lines_in_verse(full_passage_buf);
-  int passage_y_offset = passage_lines >= 7 ? 0 : 7 - passage_lines;
+  int passage_y_center_offset = 240 + floor((160 - ((passage_lines >= 7 ? 7 : passage_lines + 1) * Font16.Height)) / 2);
   char *next_word = strtok(full_passage_buf, " ");
   while(next_word != NULL){
     if (passage_line == 7) break;
 
-    if (strlen(passage_buf) + strlen(next_word) + 1 <= 26){
-      strcat(passage_buf, next_word);
-      if (strlen(passage_buf) != 26) strcat(passage_buf, " ");
+    if (strlen(passage_line_buf) + strlen(next_word) + 1 <= 26){
+      strcat(passage_line_buf, next_word);
+      if (strlen(passage_line_buf) != 26) strcat(passage_line_buf, " ");
       next_word = strtok(NULL, " ");
     } else {
-      if (passage_line == 6 && strlen(passage_buf) + 4 < 26) strcat(passage_buf, "...");
-      Paint_DrawString_EN(15, 270 + (Font16.Height * (passage_y_offset + passage_line++)), passage_buf, &Font16, WHITE, BLACK);
-      memset(passage_buf, 0, sizeof(passage_buf));
+      if (passage_line == 6 && strlen(passage_line_buf) + 4 < 26) strcat(passage_line_buf, "...");
+      Paint_DrawString_EN(15, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
+      memset(passage_line_buf, 0, sizeof(passage_line_buf));
     }
   }
 
-  if (passage_line != 7) Paint_DrawString_EN(15, 270 + (Font16.Height * (passage_y_offset + passage_line++)), passage_buf, &Font16, WHITE, BLACK);
+  if (passage_line != 7) Paint_DrawString_EN(15, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
   sprintf(passage_ref_buf, "- %s", passageinfo.passage);
-  Paint_DrawString_EN(285 - (Font16.Width * strlen(passage_ref_buf)), 270 + (Font16.Height * (passage_y_offset + passage_line)), passage_ref_buf, &Font16, WHITE, BLACK);
+  Paint_DrawString_EN(285 - (Font16.Width * strlen(passage_ref_buf)), passage_y_center_offset + (Font16.Height * (passage_line)), passage_ref_buf, &Font16, WHITE, BLACK);
 
   EPD_4IN2_V2_PartialDisplay(Canvas, 0, 0, EPD_4IN2_V2_WIDTH, EPD_4IN2_V2_HEIGHT);
   DEV_Delay_ms(250);

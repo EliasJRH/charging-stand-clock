@@ -80,19 +80,19 @@ void loop() {
 
   int offset = abs(weather.temp) < 10 ? floor(FontCascadia3.Width/2) : 0;
   offset -= weather.temp < 0 ? floor(FontCascadia3.Width/2) : 0;
-  Paint_DrawNum(90 + offset, 120, weather.temp, &FontCascadia3, BLACK, WHITE);
-  Paint_DrawCircle(170 - offset, 135, 4, BLACK, DOT_PIXEL_2X2, DRAW_FILL_EMPTY);
-  Paint_DrawChar(180 - offset, 120, 'C', &FontCascadia3, BLACK, WHITE);
+  Paint_DrawNum(90 + offset, 112, weather.temp, &FontCascadia3, BLACK, WHITE);
+  Paint_DrawCircle(170 - offset, 127, 4, BLACK, DOT_PIXEL_2X2, DRAW_FILL_EMPTY);
+  Paint_DrawChar(180 - offset, 112, 'C', &FontCascadia3, BLACK, WHITE);
 
   memset(feels_like_buf, 0, sizeof feels_like_buf);
   sprintf(feels_like_buf, "Feels like: %d", weather.feels_like);
-  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(feels_like_buf) * Font20.Width) / 2), 180, feels_like_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(feels_like_buf) * Font20.Width) / 2), 172, feels_like_buf, &Font20, WHITE, BLACK);
 
   memset(min_max_buf, 0, sizeof min_max_buf);
   sprintf(min_max_buf, "High: %d | Low: %d", weather.max, weather.min);
-  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(min_max_buf) * Font20.Width) / 2), 200, min_max_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(min_max_buf) * Font20.Width) / 2), 192, min_max_buf, &Font20, WHITE, BLACK);
 
-  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(weather.desc) * Font20.Width) / 2), 220, weather.desc, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(weather.desc) * Font20.Width) / 2), 212, weather.desc, &Font20, WHITE, BLACK);
 
   int passage_line = 0;
   memset(full_passage_buf, 0, sizeof(full_passage_buf));

@@ -46,7 +46,7 @@ bool get_bible_verse(uint16_t cur_day_num, PassageInfo *passageinfo){
   strip_invalid_chars(&passage_content);
   strncpy(passageinfo->content, passage_content.c_str(), passage_content.length());
   
-  String passage_reference = JSON.stringify(passage_content_json["reference"]);
+  String passage_reference = JSON.stringify(passage_content_json["reference"]).substring(1, JSON.stringify(passage_content_json["reference"]).length() - 1);
   strncpy(passageinfo->passage, passage_reference.c_str(), passage_reference.length());
 
   return true;

@@ -90,7 +90,9 @@ void loop() {
 
   memset(min_max_buf, 0, sizeof min_max_buf);
   sprintf(min_max_buf, "High: %d | Low: %d", weather.max, weather.min);
-  Paint_DrawString_EN(25, 200, min_max_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(min_max_buf) * Font20.Width) / 2), 200, min_max_buf, &Font20, WHITE, BLACK);
+
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(weather.desc) * Font20.Width) / 2), 220, weather.desc, &Font20, WHITE, BLACK);
 
   int passage_line = 0;
   memset(full_passage_buf, 0, sizeof(full_passage_buf));
@@ -109,7 +111,7 @@ void loop() {
       next_word = strtok(NULL, " ");
     } else {
       if (passage_line == 6 && strlen(passage_line_buf) + 4 < 26) strcat(passage_line_buf, "...");
-      Paint_DrawString_EN(15, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
+      Paint_DrawString_EN(16, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
       memset(passage_line_buf, 0, sizeof(passage_line_buf));
     }
   }

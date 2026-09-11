@@ -6,7 +6,7 @@ typedef struct {
   int16_t feels_like;
   int16_t min;
   int16_t max;
-  char* desc;
+  char desc[50];
 } Weather;
 
 bool update_weather(Weather* weather);

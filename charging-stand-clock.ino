@@ -25,6 +25,7 @@ char passage_line_buf[35];
 char passage_ref_buf[25];
 uint8_t days_in_month[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 uint16_t days = 0;
+const uint8_t MAX_VERSE_LINES = 8;
 
 void setup() {
   DEV_Module_Init();
@@ -56,7 +57,7 @@ void loop() {
   sprintf(date_buf, "%s %s %u %u", day_names[datetimedayinfo.weekday], month_names[datetimedayinfo.datetime.Month], datetimedayinfo.datetime.Day + 1, datetimedayinfo.datetime.Year);
   Paint_DrawTime(25, 20, &(datetimedayinfo.datetime), &FontCascadia3, WHITE, BLACK);
   Paint_DrawString_EN(255, 50, datetimedayinfo.amorpm, &Font20, WHITE, BLACK);
-  Paint_DrawString_EN(52, 80, date_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(date_buf) * Font20.Width) / 2), 80, date_buf, &Font20, WHITE, BLACK);
   
   // Weather 
   if (last_hour != datetimedayinfo.datetime.Hour) {
@@ -85,7 +86,7 @@ void loop() {
 
   memset(feels_like_buf, 0, sizeof feels_like_buf);
   sprintf(feels_like_buf, "Feels like: %d", weather.feels_like);
-  Paint_DrawString_EN(55, 180, feels_like_buf, &Font20, WHITE, BLACK);
+  Paint_DrawString_EN(floor((EPD_4IN2_V2_HEIGHT - strlen(feels_like_buf) * Font20.Width) / 2), 180, feels_like_buf, &Font20, WHITE, BLACK);
 
   memset(min_max_buf, 0, sizeof min_max_buf);
   sprintf(min_max_buf, "High: %d | Low: %d", weather.max, weather.min);
@@ -97,10 +98,10 @@ void loop() {
   memset(passage_line_buf, 0, sizeof(passage_line_buf));
 
   int passage_lines = lines_in_verse(full_passage_buf);
-  int passage_y_center_offset = 240 + floor((160 - ((passage_lines >= 7 ? 7 : passage_lines + 1) * Font16.Height)) / 2);
+  int passage_y_center_offset = 230 + floor((170 - ((passage_lines >= MAX_VERSE_LINES ? MAX_VERSE_LINES : passage_lines + 1) * Font16.Height)) / 2);
   char *next_word = strtok(full_passage_buf, " ");
   while(next_word != NULL){
-    if (passage_line == 7) break;
+    if (passage_line == MAX_VERSE_LINES) break;
 
     if (strlen(passage_line_buf) + strlen(next_word) + 1 <= 26){
       strcat(passage_line_buf, next_word);
@@ -113,7 +114,7 @@ void loop() {
     }
   }
 
-  if (passage_line != 7) Paint_DrawString_EN(15, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
+  if (passage_line != MAX_VERSE_LINES) Paint_DrawString_EN(16, passage_y_center_offset + (Font16.Height * (passage_line++)), passage_line_buf, &Font16, WHITE, BLACK);
   sprintf(passage_ref_buf, "- %s", passageinfo.passage);
   Paint_DrawString_EN(285 - (Font16.Width * strlen(passage_ref_buf)), passage_y_center_offset + (Font16.Height * (passage_line)), passage_ref_buf, &Font16, WHITE, BLACK);
 
